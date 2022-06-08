@@ -34,3 +34,29 @@ environment:
     - ruby_version: "21"
     - ruby_version: "200-x64"
     - ruby_version: "200"
+
+for:
+-
+  matrix:
+    only:
+      - ruby_version: "31-x64"
+  install:
+    - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
+    - ruby --version
+    - gem --version
+    - ridk install 1 3
+    - ridk exec bundle install
+-
+  matrix:
+    only:
+      - ruby_version: "31"
+  install:
+    - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
+    - ruby --version
+    - gem --version
+    - ridk exec pacman -S --needed --noconfirm autoconf autogen automake-wrapper diffutils file gawk grep libtool m4 make patch sed texinfo texinfo-tex wget mingw-w64-i686-binutils mingw-w64-i686-crt-git mingw-w64-i686-gcc mingw-w64-i686-gcc-libs mingw-w64-i686-headers-git mingw-w64-i686-libmangle-git mingw-w64-i686-libwinpthread-git mingw-w64-i686-make mingw-w64-i686-tools-git mingw-w64-i686-winpthreads-git pkg-config
+    - ridk exec bundle install
+    - ridk exec gem uninstall win32-api -s --force
+    - ridk exec gem install win32-api --platform ruby
+  test_script:
+    - rake test
